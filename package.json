@@ -4,7 +4,8 @@
     "dotenv": "^16.0.3",
     "ejs": "^3.1.8",
     "express": "^4.18.2",
-    "mongoose": "^6.8.2"
+    "mongoose": "^6.8.2",
+    "path": "^0.12.7"
   },
   "name": "wiki-api",
   "version": "1.0.0",
@@ -14,6 +15,14 @@
   },
   "author": "Jesse Krensel",
   "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jeklnd/wiki-api.git"
+  },
+  "bugs": {
+    "url": "https://github.com/jeklnd/wiki-api/issues"
+  },
+  "homepage": "https://github.com/jeklnd/wiki-api#readme",
   "devDependencies": {},
   "description": ""
 }
