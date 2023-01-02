@@ -1,5 +1,6 @@
 // import modules
 const express = require("express");
+const path = require("path");
 const bodyParser = require("body-parser");
 const ejs = require("ejs");
 const mongoose = require("mongoose");
@@ -14,7 +15,7 @@ app.use(express.static(path.join(__dirname, "public")));
 
 // connect to database
 mongoose.set("strictQuery", true);
-mongoose.connect(process.env.MONGO_URL);
+mongoose.connect(process.env.MONGO_URI);
 
 // define collections
 const Article = new mongoose.model(
@@ -24,6 +25,10 @@ const Article = new mongoose.model(
     content: String,
   }))
 );
+
+app.get("/", (req, res) => {
+  res.render("home")
+});
 
 app.listen(port, () => {
   console.log(`Server listening on port ${port}`);
