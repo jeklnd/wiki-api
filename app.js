@@ -5,6 +5,7 @@ const bodyParser = require("body-parser");
 const ejs = require("ejs");
 const mongoose = require("mongoose");
 require("dotenv").config();
+const _ = require("lodash");
 
 // initializations
 const app = express();
@@ -26,9 +27,102 @@ const Article = new mongoose.model(
   }))
 );
 
-app.get("/", (req, res) => {
-  res.render("home")
-});
+// routes
+app
+  .route("/articles")
+  .get((req, res) => {
+    Article.find((err, docs) => {
+      if (err) {
+        res.send(err);
+      } else {
+        res.send(docs);
+      }
+    });
+  })
+  .post((req, res) => {
+    const title = req.body.title;
+    const content = req.body.content;
+    // console.log(req.body.title);
+    // console.log(req.body.content);
+
+    const newArticle = new Article({
+      title: title,
+      content: content,
+    });
+
+    newArticle.save((err) => {
+      if (err) {
+        res.send(err);
+      } else {
+        res.send("Article saved successfully");
+      }
+    });
+  })
+  .delete((req, res) => {
+    Article.deleteMany({}, (err, articles) => {
+      if (err) {
+        res.send(err);
+      } else {
+        res.send("Articles deleted successfully");
+      }
+    });
+  });
+
+app.route("/articles/:title")
+  .get((req, res) => {
+    Article.findOne({ title: req.params.title }, (err, article) => {
+      if (err) {
+        res.send(err);
+      } else if (article) {
+        res.send(article);
+      } else {
+        res.send(
+          `Article not found. The title searched was ${req.params.title}`
+        );
+      }
+    });
+  })
+  .put((req, res) => {
+    Article.replaceOne(
+      { title: req.params.title },
+      { title: req.body.title, content: req.body.content },
+      (err) => {
+        if (err) {
+          res.send(err);
+          console.log(err);
+        } else {
+          res.send("Article replaced successfully");
+        }
+      }
+    );
+  })
+  .patch((req, res) => {
+    Article.updateOne(
+      { title: req.params.title },
+      { title: req.body.title, content: req.body.content },
+      (err) => {
+        if (err) {
+          res.send(err);
+          console.log(err);
+        } else {
+          res.send("Article updated successfully");
+        }
+      }
+    );
+  })
+  .delete((req, res) => {
+    Article.deleteOne({ title: req.params.title }, (err) => {
+      if (err) {
+        res.send(err);
+      } else {
+        res.send("Article deleted successfully");
+      }
+    });
+  });
+
+// app.get("/", (req, res) => {
+//   res.render("home");
+// });
 
 app.listen(port, () => {
   console.log(`Server listening on port ${port}`);
