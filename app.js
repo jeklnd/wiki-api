@@ -12,7 +12,6 @@ const app = express();
 const port = process.env.PORT || 3000;
 app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(express.static(path.join(__dirname, "public")));
 
 // connect to database
 mongoose.set("strictQuery", true);
@@ -119,10 +118,6 @@ app.route("/articles/:title")
       }
     });
   });
-
-// app.get("/", (req, res) => {
-//   res.render("home");
-// });
 
 app.listen(port, () => {
   console.log(`Server listening on port ${port}`);
